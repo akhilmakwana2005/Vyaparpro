@@ -59,13 +59,15 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 // Async Thunk for Updating Profile
 export const updateProfile = createAsyncThunk(
   'auth/updateProfile',
-  async (userData, { rejectWithValue }) => {
+  async (userData, thunkAPI) => {
     try {
-      const response = await axios.put('/api/auth/profile', userData);
+      const token = thunkAPI.getState().auth.userInfo.token;
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.put('/api/auth/profile', userData, config);
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       return response.data;
     } catch (error) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
@@ -77,12 +79,14 @@ export const updateProfile = createAsyncThunk(
 // Async Thunk for Getting Staff
 export const getStaff = createAsyncThunk(
   'auth/getStaff',
-  async (_, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
-      const response = await axios.get('/api/auth/staff');
+      const token = thunkAPI.getState().auth.userInfo.token;
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get('/api/auth/staff', config);
       return response.data;
     } catch (error) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
@@ -94,12 +98,14 @@ export const getStaff = createAsyncThunk(
 // Async Thunk for Adding Staff
 export const addStaff = createAsyncThunk(
   'auth/addStaff',
-  async (staffData, { rejectWithValue }) => {
+  async (staffData, thunkAPI) => {
     try {
-      const response = await axios.post('/api/auth/staff', staffData);
+      const token = thunkAPI.getState().auth.userInfo.token;
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.post('/api/auth/staff', staffData, config);
       return response.data;
     } catch (error) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
@@ -111,12 +117,14 @@ export const addStaff = createAsyncThunk(
 // Async Thunk for Deleting Staff
 export const deleteStaff = createAsyncThunk(
   'auth/deleteStaff',
-  async (id, { rejectWithValue }) => {
+  async (id, thunkAPI) => {
     try {
-      await axios.delete(`/api/auth/staff/${id}`);
+      const token = thunkAPI.getState().auth.userInfo.token;
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      await axios.delete(`/api/auth/staff/${id}`, config);
       return id;
     } catch (error) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
