@@ -289,7 +289,7 @@ export default function BillingPage() {
                 <div key={product._id} className={`flex items-center p-4 transition-colors hover:bg-gray-50 ${isOutOfStock ? 'opacity-60' : ''}`}>
                   <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mr-4 overflow-hidden border border-gray-200">
                     {product.image ? (
-                      <img src={`http://localhost:5000${product.image}`} alt={product.name} className="w-full h-full object-cover mix-blend-multiply" onError={(e) => e.target.style.display = 'none'} />
+                      <img src={`https://vyaparpro-o6hq.onrender.com${product.image}`} alt={product.name} className="w-full h-full object-cover mix-blend-multiply" onError={(e) => e.target.style.display = 'none'} />
                     ) : (
                       <Package size={22} className="text-gray-400" strokeWidth={1.5} />
                     )}

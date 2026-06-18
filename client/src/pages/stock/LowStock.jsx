@@ -64,7 +64,7 @@ const LowStock = () => {
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center text-red-400 overflow-hidden">
                             {item.image ? (
-                               <img src={`http://localhost:5000${item.image}`} alt={item.name} className="object-cover w-full h-full" onError={(e) => { e.target.src = 'https://via.placeholder.com/64?text=N/A' }} />
+                               <img src={`https://vyaparpro-o6hq.onrender.com${item.image}`} alt={item.name} className="object-cover w-full h-full" onError={(e) => { e.target.src = 'https://via.placeholder.com/64?text=N/A' }} />
                             ) : (
                                <Package size={16} />
                             )}

@@ -54,7 +54,7 @@ const EditProduct = () => {
           description: product.description || '',
         });
         if (product.image) {
-          setPreviewImage(product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`);
+          setPreviewImage(product.image.startsWith('http') ? product.image : `https://vyaparpro-o6hq.onrender.com${product.image}`);
         }
       }
     }

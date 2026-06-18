@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/quotations';
+const API_URL = 'https://vyaparpro-o6hq.onrender.com/api/quotations';
 
 const getConfig = () => {
   const token = localStorage.getItem('token');

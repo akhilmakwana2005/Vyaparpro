@@ -267,7 +267,7 @@ const Dashboard = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 overflow-hidden border border-gray-100">
                     {product.image ? (
-                      <img src={`http://localhost:5000${product.image}`} alt={product.name} className="w-full h-full object-cover mix-blend-multiply" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      <img src={`https://vyaparpro-o6hq.onrender.com${product.image}`} alt={product.name} className="w-full h-full object-cover mix-blend-multiply" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                     ) : null}
                     <Package size={18} className="text-gray-400" style={{ display: product.image ? 'none' : 'block' }} />
                   </div>
@@ -343,7 +343,7 @@ const Dashboard = () => {
                 <div key={product._id} className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 overflow-hidden border border-gray-100">
                     {product.image ? (
-                      <img src={`http://localhost:5000${product.image}`} alt={product.name} className="w-full h-full object-cover mix-blend-multiply" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      <img src={`https://vyaparpro-o6hq.onrender.com${product.image}`} alt={product.name} className="w-full h-full object-cover mix-blend-multiply" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                     ) : null}
                     <Package size={18} className="text-gray-400" style={{ display: product.image ? 'none' : 'block' }} />
                   </div>

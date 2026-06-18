@@ -138,7 +138,7 @@ const ProductList = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center font-bold text-gray-400 text-xs border border-gray-200">
                           {product.image ? (
-                            <img src={product.image.includes('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                            <img src={product.image.includes('http') ? product.image : `https://vyaparpro-o6hq.onrender.com${product.image}`} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                           ) : null}
                           <span style={{ display: product.image ? 'none' : 'block' }}>{product.name.charAt(0).toUpperCase()}</span>
                         </div>

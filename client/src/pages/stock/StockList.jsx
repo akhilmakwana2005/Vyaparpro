@@ -171,7 +171,7 @@ export default function StockList() {
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center p-2">
                           {item.image ? (
-                            <img src={item.image.includes('http') ? item.image : `http://localhost:5000${item.image}`} alt={item.name} className="object-cover w-full h-full" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                            <img src={item.image.includes('http') ? item.image : `https://vyaparpro-o6hq.onrender.com${item.image}`} alt={item.name} className="object-cover w-full h-full" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                           ) : null}
                           <span className="text-gray-400 text-xs text-center leading-tight font-bold" style={{ display: item.image ? 'none' : 'block' }}>{item.name.charAt(0).toUpperCase()}</span>
                         </div>
