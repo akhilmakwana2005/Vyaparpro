@@ -20,20 +20,30 @@ const CustomerList = () => {
   const [activeFilter, setActiveFilter] = useState('All Customers');
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   useEffect(() => {
     dispatch(getCustomers());
     dispatch(getInvoices());
   }, [dispatch]);
 
-  const handleDelete = (id, e) => {
+  const handleDeleteClick = (id, e) => {
     e.stopPropagation(); // prevent row click
-    if (window.confirm('Are you sure you want to delete this customer?')) {
-      dispatch(deleteCustomer(id))
-        .unwrap()
-        .then(() => toast.success('Customer deleted successfully!'))
-        .catch((err) => toast.error(err || 'Failed to delete customer'));
-    }
+    setConfirmDelete(id);
+  };
+
+  const confirmDeleteAction = () => {
+    if (!confirmDelete) return;
+    dispatch(deleteCustomer(confirmDelete))
+      .unwrap()
+      .then(() => {
+        toast.success('Customer deleted successfully!');
+        setConfirmDelete(null);
+      })
+      .catch((err) => {
+        toast.error(err || 'Failed to delete customer');
+        setConfirmDelete(null);
+      });
   };
 
   const handleSendReminder = (id, e) => {
@@ -121,7 +131,7 @@ const CustomerList = () => {
           <button onClick={handleExport} className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors bg-white">
             <Download size={16} /> Export List
           </button>
-          <button onClick={() => navigate('/customers/add')} className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-bold hover:bg-opacity-90 transition-colors shadow-soft">
+          <button onClick={() => navigate('/customers/add')} className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-bold hover:bg-opacity-90 transition-colors border border-transparent">
             <UserPlus size={16} /> Add Customer
           </button>
         </div>
@@ -131,7 +141,7 @@ const CustomerList = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
         {/* Card 1 — Total Customers */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-soft px-6 py-5">
+        <div className="bg-white rounded-2xl border border-gray-200 px-6 py-5">
           <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-4">Total Customers</p>
           <div className="flex items-center gap-2">
             <span className="text-3xl font-bold text-gray-900">{customers.length}</span>
@@ -139,7 +149,7 @@ const CustomerList = () => {
         </div>
 
         {/* Card 2 — Active This Month */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-soft px-6 py-5">
+        <div className="bg-white rounded-2xl border border-gray-200 px-6 py-5">
           <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-4">Active This Month</p>
           <div className="flex items-center gap-2">
             <span className="text-3xl font-bold text-gray-900">{activeThisMonth}</span>
@@ -147,7 +157,7 @@ const CustomerList = () => {
         </div>
 
         {/* Card 3 — Total Outstanding */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-soft px-6 py-5">
+        <div className="bg-white rounded-2xl border border-gray-200 px-6 py-5">
           <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-4">Total Outstanding</p>
           <div className="flex items-center gap-2">
             <span className="text-3xl font-bold text-primary">₹{customers.reduce((acc, curr) => acc + (curr.openingBalance || 0), 0).toLocaleString()}</span>
@@ -174,7 +184,7 @@ const CustomerList = () => {
       </div>
 
       {/* ── Customer Table ── */}
-      <div className="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
 
         {/* Filter Bar */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between px-6 py-4 border-b border-gray-100 gap-4">
@@ -297,7 +307,7 @@ const CustomerList = () => {
                         </button>
                       )}
                       <button 
-                        onClick={(e) => handleDelete(customer._id, e)}
+                        onClick={(e) => handleDeleteClick(customer._id, e)}
                         className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete Customer"
                       >
@@ -351,6 +361,25 @@ const CustomerList = () => {
           </div>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Customer?</h3>
+            <p className="text-sm text-gray-500 mb-6">Are you sure you want to delete this customer? This action will permanently remove their profile and cannot be undone.</p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
+                Cancel
+              </button>
+              <button onClick={confirmDeleteAction} className="px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 transition-colors">
+                Delete Customer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
