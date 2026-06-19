@@ -199,7 +199,7 @@ const QuotationList = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-end gap-1 transition-opacity">
                         {quotation.status !== 'Converted' && quotation.status !== 'Expired' && quotation.status !== 'Rejected' && (
                           <button onClick={() => handleConvert(quotation._id)} className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="Convert to Bill">
                             <FilePlus size={15} />
