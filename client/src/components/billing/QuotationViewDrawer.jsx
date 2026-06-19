@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { X, Printer, CheckCircle, User, Calendar, Hash, Package, FileText, ArrowRight } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { convertQuotationToInvoice } from '../../redux/quotationSlice';
+import { convertQuotationToInvoice, updateQuotation } from '../../redux/quotationSlice';
 import { useReactToPrint } from 'react-to-print';
 import QuotationTemplate from './QuotationTemplate';
 import toast from 'react-hot-toast';
@@ -36,6 +36,16 @@ const QuotationViewDrawer = ({ quotation, businessInfo, onClose, onUpdated }) =>
       navigate('/billing/history');
     } catch (err) {
       toast.error(err || 'Failed to convert quotation');
+    }
+  };
+
+  const handleStatusChange = async (newStatus) => {
+    try {
+      await dispatch(updateQuotation({ id: quotation._id, updates: { status: newStatus } })).unwrap();
+      toast.success(`Status updated to ${newStatus}`);
+      if (onUpdated) onUpdated();
+    } catch (err) {
+      toast.error(err || 'Failed to update status');
     }
   };
 
@@ -110,6 +120,21 @@ const QuotationViewDrawer = ({ quotation, businessInfo, onClose, onUpdated }) =>
                     <div className={`w-2 h-2 rounded-full ${cfg.dot}`} />
                     <span className="text-xs font-bold uppercase tracking-wider">{cfg.label}</span>
                   </div>
+                  
+                  {quotation.status !== 'Converted' && (
+                    <select
+                      value={quotation.status}
+                      onChange={(e) => handleStatusChange(e.target.value)}
+                      disabled={isLoading}
+                      className="text-xs font-bold text-gray-600 bg-gray-50 border border-gray-200 px-2 py-1.5 rounded-lg outline-none cursor-pointer"
+                    >
+                      <option value="Draft">Draft</option>
+                      <option value="Sent">Sent</option>
+                      <option value="Accepted">Accepted</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Expired">Expired</option>
+                    </select>
+                  )}
                 </div>
                 
                 {quotation.status !== 'Converted' && (
