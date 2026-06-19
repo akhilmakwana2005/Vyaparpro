@@ -27,6 +27,7 @@ const ProductList = () => {
 
   const [printProduct, setPrintProduct] = useState(null);
   const [printQuantity, setPrintQuantity] = useState(1);
+  const [confirmDelete, setConfirmDelete] = useState(null);
   const printRef = useRef(null);
 
   const executePrint = useReactToPrint({
@@ -42,15 +43,20 @@ const ProductList = () => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      const result = await dispatch(deleteProduct(id));
-      if (deleteProduct.fulfilled.match(result)) {
-        toast.success('Product deleted successfully');
-      } else {
-        console.error('Delete error:', result.payload);
-        toast.error(`Failed: ${result.payload || 'Unknown error'}`);
-      }
+  const handleDeleteClick = (id) => {
+    setConfirmDelete(id);
+  };
+
+  const confirmDeleteAction = async () => {
+    if (!confirmDelete) return;
+    const result = await dispatch(deleteProduct(confirmDelete));
+    if (deleteProduct.fulfilled.match(result)) {
+      toast.success('Product deleted successfully');
+      setConfirmDelete(null);
+    } else {
+      console.error('Delete error:', result.payload);
+      toast.error(`Failed: ${result.payload || 'Unknown error'}`);
+      setConfirmDelete(null);
     }
   };
 
@@ -83,13 +89,13 @@ const ProductList = () => {
           <button onClick={handleExport} className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
             <Download size={16} /> Export List
           </button>
-          <Link to="/products/add" className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-medium hover:bg-opacity-90 transition-colors shadow-soft">
+          <Link to="/products/add" className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-colors border border-transparent">
             <Plus size={16} /> Add Product
           </Link>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-soft overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl flex-1 w-full sm:max-w-sm">
             <Search size={16} className="text-gray-400" />
@@ -110,7 +116,7 @@ const ProductList = () => {
             <PackageOpen size={48} className="text-gray-300 mb-4" />
             <h3 className="text-lg font-bold text-gray-900 mb-1">No products found</h3>
             <p className="text-gray-500 text-sm max-w-sm">You haven't added any products yet, or none match your search.</p>
-            <Link to="/products/add" className="mt-6 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90">
+            <Link to="/products/add" className="mt-6 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-bold hover:bg-black">
               Add your first product
             </Link>
           </div>
@@ -162,8 +168,8 @@ const ProductList = () => {
                         {product.sku && (
                           <button onClick={() => setPrintProduct(product)} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Print Barcodes"><Printer size={15} /></button>
                         )}
-                        <button onClick={() => navigate(`/products/edit/${product._id}`)} className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="Edit"><Edit2 size={15} /></button>
-                        <button onClick={() => handleDelete(product._id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={15} /></button>
+                        <button onClick={() => navigate(`/products/edit/${product._id}`)} className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="Edit"><Edit2 size={15} /></button>
+                        <button onClick={() => handleDeleteClick(product._id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={15} /></button>
                       </div>
                     </td>
                   </tr>
@@ -239,8 +245,26 @@ const ProductList = () => {
               <button onClick={() => setPrintProduct(null)} className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50">
                 Cancel
               </button>
-              <button onClick={executePrint} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700">
+              <button onClick={executePrint} className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black">
                 <Printer size={16} /> Print Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Product?</h3>
+            <p className="text-sm text-gray-500 mb-6">Are you sure you want to delete this product? This action cannot be undone and may affect historical records.</p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
+                Cancel
+              </button>
+              <button onClick={confirmDeleteAction} className="px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 transition-colors">
+                Delete Product
               </button>
             </div>
           </div>
