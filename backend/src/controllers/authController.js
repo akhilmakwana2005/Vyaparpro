@@ -34,6 +34,7 @@ export const registerUser = async (req, res) => {
         businessName: user.businessName,
         businessAddress: user.businessAddress,
         gstNumber: user.gstNumber,
+        logo: user.logo,
         taxSettings: user.taxSettings,
         token: token,
       });
@@ -68,6 +69,7 @@ export const loginUser = async (req, res) => {
         businessName: user.businessName,
         businessAddress: user.businessAddress,
         gstNumber: user.gstNumber,
+        logo: user.logo,
         taxSettings: user.taxSettings,
         token: token,
       });
@@ -108,6 +110,7 @@ export const getUserProfile = async (req, res) => {
         businessName: user.businessName,
         businessAddress: user.businessAddress,
         gstNumber: user.gstNumber,
+        logo: user.logo,
         taxSettings: user.taxSettings,
       });
     } else {
@@ -132,6 +135,7 @@ export const updateUserProfile = async (req, res) => {
       if (req.body.businessName !== undefined) user.businessName = req.body.businessName;
       if (req.body.businessAddress !== undefined) user.businessAddress = req.body.businessAddress;
       if (req.body.gstNumber !== undefined) user.gstNumber = req.body.gstNumber;
+      if (req.body.logo !== undefined) user.logo = req.body.logo;
 
       if (req.body.taxSettings) {
         user.taxSettings = {
@@ -156,6 +160,7 @@ export const updateUserProfile = async (req, res) => {
         businessName: updatedUser.businessName,
         businessAddress: updatedUser.businessAddress,
         gstNumber: updatedUser.gstNumber,
+        logo: updatedUser.logo,
         taxSettings: updatedUser.taxSettings,
       });
     } else {

@@ -9,6 +9,8 @@ const CreateBusiness = () => {
   const [shopName, setShopName] = useState('');
   const [gstNumber, setGstNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [logo, setLogo] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,6 +30,21 @@ const CreateBusiness = () => {
     }
   }, [error]);
 
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        return toast.error('Logo image must be less than 2MB');
+      }
+      setLogo(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleContinue = async (e) => {
     e.preventDefault();
     if (!shopName.trim()) {
@@ -35,11 +52,17 @@ const CreateBusiness = () => {
     }
 
     try {
-      const resultAction = await dispatch(updateProfile({
+      const payload = {
         businessName: shopName,
         gstNumber,
         businessAddress: address,
-      }));
+      };
+      
+      if (logoPreview) {
+        payload.logo = logoPreview;
+      }
+
+      const resultAction = await dispatch(updateProfile(payload));
       if (updateProfile.fulfilled.match(resultAction)) {
         toast.success('Business created successfully!');
         navigate('/onboarding/success');
@@ -106,10 +129,25 @@ const CreateBusiness = () => {
 
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">Upload Logo (Optional)</label>
-          <button type="button" className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl py-4 hover:bg-gray-50 hover:border-primary transition-colors text-primary">
-            <UploadCloud size={24} className="mb-2" />
-            <span className="text-xs font-medium">Upload Logo</span>
-          </button>
+          <div className="relative">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleLogoChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+            {logoPreview ? (
+              <div className="w-full flex flex-col items-center justify-center border-2 border-dashed border-primary bg-primary bg-opacity-5 rounded-xl py-4 overflow-hidden relative">
+                <img src={logoPreview} alt="Logo Preview" className="h-20 object-contain mb-2" />
+                <span className="text-xs font-medium text-primary">Change Logo</span>
+              </div>
+            ) : (
+              <button type="button" className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl py-4 hover:bg-gray-50 hover:border-primary transition-colors text-primary pointer-events-none">
+                <UploadCloud size={24} className="mb-2" />
+                <span className="text-xs font-medium">Upload Logo (Max 2MB)</span>
+              </button>
+            )}
+          </div>
         </div>
 
         <button

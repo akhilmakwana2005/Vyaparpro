@@ -28,7 +28,7 @@ const StatCard = ({ title, value, icon: Icon, trend, isPositive, colorClass, bgC
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  
+
   const { invoices = [] } = useSelector((state) => state.billing || {});
   const { products = [] } = useSelector((state) => state.product || {});
   const { customers = [] } = useSelector((state) => state.customer || {});
@@ -74,13 +74,13 @@ const Dashboard = () => {
 
   // Metrics
   const { todaySales, todayTrend, todayProfit, profitTrend, pendingDue, pendingTrend, newCustomersTrend } = useMemo(() => {
-    const todayStart = new Date(); todayStart.setHours(0,0,0,0);
-    const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
-    
-    const yesterdayStart = new Date(); yesterdayStart.setDate(yesterdayStart.getDate() - 1); yesterdayStart.setHours(0,0,0,0);
-    const yesterdayEnd = new Date(); yesterdayEnd.setDate(yesterdayEnd.getDate() - 1); yesterdayEnd.setHours(23,59,59,999);
+    const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date(); todayEnd.setHours(23, 59, 59, 999);
 
-    const sevenDaysAgoStart = new Date(); sevenDaysAgoStart.setDate(sevenDaysAgoStart.getDate() - 7); sevenDaysAgoStart.setHours(0,0,0,0);
+    const yesterdayStart = new Date(); yesterdayStart.setDate(yesterdayStart.getDate() - 1); yesterdayStart.setHours(0, 0, 0, 0);
+    const yesterdayEnd = new Date(); yesterdayEnd.setDate(yesterdayEnd.getDate() - 1); yesterdayEnd.setHours(23, 59, 59, 999);
+
+    const sevenDaysAgoStart = new Date(); sevenDaysAgoStart.setDate(sevenDaysAgoStart.getDate() - 7); sevenDaysAgoStart.setHours(0, 0, 0, 0);
 
     // Sales Trend
     const tSales = calcSalesForPeriod(todayStart, todayEnd);
@@ -94,13 +94,13 @@ const Dashboard = () => {
 
     // Pending Due
     const pDue = invoices.filter(i => i.status === 'Pending' || i.status === 'Hold').reduce((a, b) => a + (b.total || 0), 0);
-    
+
     // Growth metrics
     const newCustomers = customers.filter(c => new Date(c.createdAt) >= sevenDaysAgoStart).length;
 
-    return { 
-      todaySales: tSales, 
-      todayTrend: tTrend, 
+    return {
+      todaySales: tSales,
+      todayTrend: tTrend,
       todayProfit: tProfit,
       profitTrend: pTrend,
       pendingDue: pDue,
@@ -117,16 +117,16 @@ const Dashboard = () => {
     if (chartRange === 'This Week') {
       for (let i = 6; i >= 0; i--) {
         const d = new Date(); d.setDate(d.getDate() - i);
-        const start = new Date(d.setHours(0,0,0,0));
-        const end = new Date(d.setHours(23,59,59,999));
+        const start = new Date(d.setHours(0, 0, 0, 0));
+        const end = new Date(d.setHours(23, 59, 59, 999));
         data.push({ name: start.toLocaleDateString('en-US', { weekday: 'short' }), sales: calcSalesForPeriod(start, end) });
       }
     } else if (chartRange === 'This Month') {
       const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
       for (let i = 1; i <= daysInMonth; i++) {
         const d = new Date(now.getFullYear(), now.getMonth(), i);
-        const start = new Date(d.setHours(0,0,0,0));
-        const end = new Date(d.setHours(23,59,59,999));
+        const start = new Date(d.setHours(0, 0, 0, 0));
+        const end = new Date(d.setHours(23, 59, 59, 999));
         if (d <= now) {
           data.push({ name: i.toString(), sales: calcSalesForPeriod(start, end) });
         }
@@ -177,44 +177,44 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          title="Today's Sales" 
-          value={`₹ ${todaySales.toLocaleString('en-IN')}`} 
-          icon={Wallet} 
-          trend={todayTrend.text} 
-          isPositive={todayTrend.isPositive} 
+        <StatCard
+          title="Today's Sales"
+          value={`₹ ${todaySales.toLocaleString('en-IN')}`}
+          icon={Wallet}
+          trend={todayTrend.text}
+          isPositive={todayTrend.isPositive}
           colorClass={todayTrend.text === 'N/A' ? 'text-gray-400' : (todayTrend.isPositive ? 'text-green-500' : 'text-red-500')}
           bgClass="bg-green-50"
           iconClass="text-green-500"
           showArrow={todayTrend.text !== 'N/A'}
         />
-        <StatCard 
-          title="Today's Profit" 
-          value={`₹ ${todayProfit.toLocaleString('en-IN')}`} 
-          icon={TrendingUp} 
-          trend={profitTrend.text} 
-          isPositive={profitTrend.isPositive} 
+        <StatCard
+          title="Today's Profit"
+          value={`₹ ${todayProfit.toLocaleString('en-IN')}`}
+          icon={TrendingUp}
+          trend={profitTrend.text}
+          isPositive={profitTrend.isPositive}
           colorClass={profitTrend.text === 'N/A' ? 'text-gray-400' : (profitTrend.isPositive ? 'text-blue-500' : 'text-red-500')}
           bgClass="bg-blue-50"
           iconClass="text-blue-500"
           showArrow={profitTrend.text !== 'N/A'}
         />
-        <StatCard 
-          title="Total Customers" 
-          value={customers.length} 
-          icon={Users} 
-          trend={newCustomersTrend.text} 
-          isPositive={newCustomersTrend.isPositive} 
+        <StatCard
+          title="Total Customers"
+          value={customers.length}
+          icon={Users}
+          trend={newCustomersTrend.text}
+          isPositive={newCustomersTrend.isPositive}
           colorClass="text-purple-500"
           bgClass="bg-purple-50"
           iconClass="text-purple-500"
         />
-        <StatCard 
-          title="Pending Due" 
-          value={`₹ ${pendingDue.toLocaleString('en-IN')}`} 
-          icon={Wallet} 
-          trend={pendingTrend.text} 
-          isPositive={pendingTrend.isPositive} 
+        <StatCard
+          title="Pending Due"
+          value={`₹ ${pendingDue.toLocaleString('en-IN')}`}
+          icon={Wallet}
+          trend={pendingTrend.text}
+          isPositive={pendingTrend.isPositive}
           colorClass="text-orange-500"
           bgClass="bg-orange-50"
           iconClass="text-orange-500"
@@ -242,15 +242,15 @@ const Dashboard = () => {
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#5B4CF0" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#5B4CF0" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#5B4CF0" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="#5B4CF0" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9ca3af', fontSize: 10}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#9ca3af', fontSize: 10}} tickFormatter={(value) => `${(value / 1000).toFixed(1)}K`} />
-                <Tooltip cursor={{stroke: '#e5e7eb', strokeWidth: 1, strokeDasharray: '3 3'}} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', fontSize: '12px'}} />
-                <Area type="monotone" dataKey="sales" stroke="#5B4CF0" strokeWidth={2} fillOpacity={1} fill="url(#colorSales)" dot={{r: 4, fill: '#5B4CF0', strokeWidth: 2, stroke: '#fff'}} activeDot={{r: 6}} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 10 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 10 }} tickFormatter={(value) => `${(value / 1000).toFixed(1)}K`} />
+                <Tooltip cursor={{ stroke: '#e5e7eb', strokeWidth: 1, strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', fontSize: '12px' }} />
+                <Area type="monotone" dataKey="sales" stroke="#5B4CF0" strokeWidth={2} fillOpacity={1} fill="url(#colorSales)" dot={{ r: 4, fill: '#5B4CF0', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -314,9 +314,8 @@ const Dashboard = () => {
                     <td className="py-3 font-bold text-gray-900">₹ {(bill.total || 0).toLocaleString('en-IN')}</td>
                     <td className="py-3 font-medium text-gray-500">{new Date(bill.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</td>
                     <td className="py-3 text-right px-2">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold ${
-                        bill.status === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
-                      }`}>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold ${bill.status === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                        }`}>
                         {bill.status}
                       </span>
                     </td>

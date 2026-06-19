@@ -51,10 +51,16 @@ const Sidebar = ({ isOpen, onClose }) => {
         }`}>
         <div className="p-6">
           <div className="flex items-center gap-2">
-            <div className="bg-primary text-white p-1.5 rounded-lg">
-              <ShoppingBag size={20} />
-            </div>
-            <span className="text-xl font-bold text-gray-900">VyaparPro</span>
+            {userInfo?.logo ? (
+              <img src={userInfo.logo} alt="Shop Logo" className="h-8 w-auto rounded object-contain max-w-[40px]" />
+            ) : (
+              <div className="bg-primary text-white p-1.5 rounded-lg">
+                <ShoppingBag size={20} />
+              </div>
+            )}
+            <span className="text-xl font-bold text-gray-900 truncate">
+              {userInfo?.businessName || 'VyaparPro'}
+            </span>
           </div>
         </div>
 

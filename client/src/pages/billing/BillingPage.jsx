@@ -10,11 +10,12 @@ import toast from 'react-hot-toast';
 import { useReactToPrint } from 'react-to-print';
 import InvoiceTemplate from '../../components/billing/InvoiceTemplate';
 import BarcodeScannerModal from '../../components/billing/BarcodeScannerModal';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function BillingPage() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { products = [] } = useSelector((state) => state.product || {});
   const { customers = [] } = useSelector((state) => state.customer || {});
@@ -274,8 +275,11 @@ export default function BillingPage() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 7v10"/><path d="M12 7v10"/><path d="M16 7v10"/></svg>
             </div>
           </button>
-          <button className="w-11 h-11 flex items-center justify-center bg-gray-50 border border-gray-100 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors">
-            <LayoutGrid size={20} />
+          <button 
+            onClick={() => navigate('/billing/history')}
+            className="flex items-center gap-2 px-4 h-11 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 font-semibold text-sm hover:bg-indigo-100 transition-colors whitespace-nowrap"
+          >
+            History
           </button>
         </div>
 
