@@ -48,7 +48,8 @@ const ProductList = () => {
       if (deleteProduct.fulfilled.match(result)) {
         toast.success('Product deleted successfully');
       } else {
-        toast.error('Failed to delete product');
+        console.error('Delete error:', result.payload);
+        toast.error(`Failed: ${result.payload || 'Unknown error'}`);
       }
     }
   };
