@@ -89,7 +89,7 @@ const ProductList = () => {
           <button onClick={handleExport} className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
             <Download size={16} /> Export List
           </button>
-          <Link to="/products/add" className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-colors border border-transparent">
+          <Link to="/products/add" className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-medium hover:bg-opacity-90 transition-colors shadow-soft">
             <Plus size={16} /> Add Product
           </Link>
         </div>
@@ -116,7 +116,7 @@ const ProductList = () => {
             <PackageOpen size={48} className="text-gray-300 mb-4" />
             <h3 className="text-lg font-bold text-gray-900 mb-1">No products found</h3>
             <p className="text-gray-500 text-sm max-w-sm">You haven't added any products yet, or none match your search.</p>
-            <Link to="/products/add" className="mt-6 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-bold hover:bg-black">
+            <Link to="/products/add" className="mt-6 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90">
               Add your first product
             </Link>
           </div>
@@ -245,7 +245,7 @@ const ProductList = () => {
               <button onClick={() => setPrintProduct(null)} className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50">
                 Cancel
               </button>
-              <button onClick={executePrint} className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black">
+              <button onClick={executePrint} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700">
                 <Printer size={16} /> Print Now
               </button>
             </div>
